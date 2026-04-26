@@ -4,6 +4,13 @@ A minimal macOS app with **ON** and **OFF** buttons to control a Xiaomi smart li
 
 ![App Icon](icon.svg)
 
+[
+    <img src="icon.svg" width=30% title="App Icon" alt="App Icon"/>
+](
+icon.svg
+)
+
+
 ## ⚠️ Prerequisite
 
 > **This app is just a GUI wrapper around the `uvx` command.**
