@@ -1,0 +1,6 @@
+#!/bin/bash
+# Ensure Homebrew and common user bins are available (Finder has a stripped PATH)
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:$PATH"
+
+DIR="$(cd "$(dirname "$0")" && pwd)"
+exec python3 "$DIR/../Resources/light_control.py"
