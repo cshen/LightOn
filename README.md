@@ -1,12 +1,12 @@
 # LightOn — 书房台灯 Controller
 
-A minimal macOS app with **ON** and **OFF** buttons to control a Xiaomi smart light from your Desktop, with built-in idle detection to auto-off the light and monitor after an hour of inactivity.
-
 [
-    <img src="icon.svg" width=15% margin="auto" title="App Icon" alt="App Icon"/>
+    <img src="icon.svg" width=12% margin="auto" title="App Icon" alt="App Icon"/>
 ](
 icon.svg
 )
+A minimal macOS app with **ON** and **OFF** buttons to control a Xiaomi smart light from your Desktop, with built-in idle detection to auto-off the light and monitor after an hour of inactivity.
+
 
 
 ## ⚠️ Prerequisite
