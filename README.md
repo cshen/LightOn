@@ -10,6 +10,7 @@ icon.svg
 
 A minimal macOS app with **ON** and **OFF** buttons to control a Xiaomi smart light from your Desktop, with built-in idle detection to auto-off the light and monitor after an hour of inactivity.
 
+一款极简的 macOS 应用，提供“开启”和“关闭”按钮，可直接从桌面控制小米智能灯；内置空闲检测功能，可在设备闲置一小时后自动关闭灯光及显示器。
 
 
 ## ⚠️ Prerequisite
