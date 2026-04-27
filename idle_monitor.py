@@ -19,6 +19,26 @@ import time
 CHECK_INTERVAL = 60       # seconds between each check
 IDLE_THRESHOLD = 3600     # 1 hour in seconds
 
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+CONFIG_FILE = os.path.join(SCRIPT_DIR, "device.config")
+
+
+def get_device_name() -> str:
+    default = "书房台灯"
+    try:
+        if os.path.isfile(CONFIG_FILE):
+            with open(CONFIG_FILE) as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith("#"):
+                        return line
+    except Exception:
+        pass
+    return default
+
+
+DEVICE_NAME = get_device_name()
+
 # Prepend Homebrew bin so uvx/pmset are found even outside a login shell
 ENV = os.environ.copy()
 ENV["PATH"] = "/opt/homebrew/bin:/usr/local/bin:" + ENV.get("PATH", "")
@@ -47,7 +67,7 @@ def get_idle_time() -> int:
 
 def turn_off_light() -> bool:
     result = subprocess.run(
-        ["uvx", "mijiaAPI", "set", "--dev_name", "书房台灯", "--prop_name", "on", "--value", "False"],
+        ["uvx", "mijiaAPI", "set", "--dev_name", DEVICE_NAME, "--prop_name", "on", "--value", "False"],
         env=ENV,
     )
     return result.returncode == 0

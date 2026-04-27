@@ -16,6 +16,26 @@ ENV["PATH"] = "/opt/homebrew/bin:/usr/local/bin:" + ENV.get("PATH", "")
 IDLE_CHECK_INTERVAL_MS = 60_000   # check every 60 seconds
 IDLE_THRESHOLD_S       = 3600     # trigger after 1 hour of inactivity
 
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+CONFIG_FILE = os.path.join(SCRIPT_DIR, "device.config")
+
+
+def get_device_name() -> str:
+    default = "书房台灯"
+    try:
+        if os.path.isfile(CONFIG_FILE):
+            with open(CONFIG_FILE) as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith("#"):
+                        return line
+    except Exception:
+        pass
+    return default
+
+
+DEVICE_NAME = get_device_name()
+
 
 def get_idle_seconds() -> int:
     """Return seconds since last mouse/keyboard input via macOS IOKit HIDIdleTime."""
@@ -90,7 +110,7 @@ class IdleMonitor(QThread):
 class LightControlWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("书房台灯")
+        self.setWindowTitle(DEVICE_NAME)
         self.setFixedSize(300, 290)
         self._idle_monitor: IdleMonitor | None = None
         self._runners: list[CommandRunner] = []
@@ -111,7 +131,7 @@ class LightControlWindow(QMainWindow):
         layout.setContentsMargins(30, 20, 30, 20)
         layout.setSpacing(12)
 
-        title = QLabel("书房台灯 Desk Light")
+        title = QLabel(f"{DEVICE_NAME} Desk Light")
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         title.setFont(QFont("PingFang SC", 20, QFont.Weight.Bold))
         layout.addWidget(title)
@@ -207,7 +227,7 @@ class LightControlWindow(QMainWindow):
 
         # Turn off light
         r1 = CommandRunner(["uvx", "mijiaAPI", "set",
-                            "--dev_name", "书房台灯",
+                            "--dev_name", DEVICE_NAME,
                             "--prop_name", "on", "--value", "False"])
         r1.finished.connect(lambda ok: self.status.setText(
             "✓ Auto-off: light off" if ok else "✗ Auto-off: light command failed"
@@ -251,12 +271,12 @@ class LightControlWindow(QMainWindow):
 
     def turn_on(self):
         self._run(["uvx", "mijiaAPI", "set",
-                   "--dev_name", "书房台灯",
+                   "--dev_name", DEVICE_NAME,
                    "--prop_name", "on", "--value", "True"], "ON")
 
     def turn_off(self):
         self._run(["uvx", "mijiaAPI", "set",
-                   "--dev_name", "书房台灯",
+                   "--dev_name", DEVICE_NAME,
                    "--prop_name", "on", "--value", "False"], "OFF")
 
     def closeEvent(self, event):
@@ -266,7 +286,7 @@ class LightControlWindow(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    app.setApplicationName("书房台灯")
+    app.setApplicationName(DEVICE_NAME)
     win = LightControlWindow()
     win.show()
     win.raise_()

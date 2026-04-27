@@ -19,8 +19,8 @@ A minimal macOS app with **ON** and **OFF** buttons to control a Xiaomi smart li
 > You must ensure the following commands run successfully in your terminal *before* using the app:
 
 ```bash
-uvx mijiaAPI set --dev_name "书房台灯" --prop_name "on" --value True
-uvx mijiaAPI set --dev_name "书房台灯" --prop_name "on" --value False
+uvx mijiaAPI set --dev_name "$(grep -v '^#' device.config | head -1)" --prop_name "on" --value True
+uvx mijiaAPI set --dev_name "$(grep -v '^#' device.config | head -1)" --prop_name "on" --value False
 ```
 
 If either command fails in the terminal, the app's buttons will also fail. Common issues to check:
@@ -28,7 +28,7 @@ If either command fails in the terminal, the app's buttons will also fail. Commo
 - `uvx` is installed (`pip install uv` or see [uv docs](https://docs.astral.sh/uv/))
 - [`mijiaAPI`](https://github.com/Do1e/mijia-api) package is accessible via `uvx`
 - Your Xiaomi account credentials are configured for `mijiaAPI`
-- The device name `书房台灯` matches exactly what is registered in your Mi Home account. You may change it in the app's Python code if needed.
+- The device name must match exactly what is registered in your Mi Home account. Edit `device.config` to change it — the default is `书房台灯`.
 
 ## Requirements
 
@@ -84,6 +84,7 @@ nohup python3 idle_monitor.py > ~/.idle_monitor.log 2>&1 &
 ```
 LightOn/
 ├── icon.svg
+├── device.config          # Mijia device name config (default: 书房台灯)
 ├── idle_monitor.py        # Standalone idle monitor (Python)
 ├── idle_monitor.fish      # Standalone idle monitor (Fish shell)
 ├── README.md
@@ -94,6 +95,7 @@ LightOn/
         │   └── LightControl        # Shell launcher (sets PATH, calls Python)
         └── Resources/
             ├── AppIcon.icns        # Generated from icon.svg
+            ├── device.config       # Mijia device name config
             └── light_control.py   # PyQt6 GUI with built-in idle monitor
 ```
 

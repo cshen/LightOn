@@ -7,6 +7,19 @@ set -l CHECK_INTERVAL 60
 set -l IDLE_THRESHOLD 3600  # 1 hour in seconds
 set -l LAST_ACTIVITY (date +%s)
 
+function get_device_name
+    set -l config_path (dirname (status filename))/device.config
+    set -l default "书房台灯"
+    if test -f "$config_path"
+        set -l name (grep -v '^\s*#' "$config_path" | grep -v '^\s*$' | head -1)
+        if test -n "$name"
+            echo $name
+            return 0
+        end
+    end
+    echo $default
+end
+
 function ts
     date '+%Y-%m-%d %H:%M:%S'
 end
@@ -25,7 +38,7 @@ end
 function turn_off_light
     # set -x exports PATH as environment variable (fish syntax, PATH is a list)
     set -x PATH /opt/homebrew/bin /usr/local/bin $PATH
-    uvx mijiaAPI set --dev_name "书房台灯" --prop_name "on" --value False
+    uvx mijiaAPI set --dev_name (get_device_name) --prop_name "on" --value False
 end
 
 function turn_off_monitor
