@@ -3,4 +3,6 @@
 export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:$PATH"
 
 DIR="$(cd "$(dirname "$0")" && pwd)"
-exec python3 "$DIR/../Resources/light_control.py"
+# Run under uv so PyQt6 is always available (no global pip install needed).
+# uv also provides `uvx`, which the app shells out to for mijiaAPI.
+exec uv run --no-project --python 3.13 --with PyQt6 "$DIR/../Resources/light_control.py"
